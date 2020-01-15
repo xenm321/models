@@ -1,0 +1,16 @@
+api_login_check:
+    path: /api/login_check
+
+test:
+    path: /test
+    controller: App\Controller\TestController::index
+    methods: [GET, POST]
+
+index:
+    path: /{path}
+    controller: App\Controller\DefaultController::index
+    defaults: { path: ""}
+    methods: [GET]
+    requirements:
+        path: .*
+

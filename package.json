@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "vue": "^2.5.16",
+    "vue-loader": "^14.2.3",
+    "vue-template-compiler": "^2.5.16"
+  },
+  "scripts": {
+    "dev-server": "./node_modules/.bin/encore dev-server",
+    "dev": "./node_modules/.bin/encore dev",
+    "watch": "./node_modules/.bin/encore dev --watch",
+    "build": "./node_modules/.bin/encore production"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "moment": "^2.22.2",
+    "qs": "^6.5.2",
+    "vee-validate": "^2.1.0-beta.7",
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.1.8"
+  }
+}

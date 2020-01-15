@@ -1,0 +1,64 @@
+version: '3.3'
+services:
+    db:
+        container_name: mlg_models_mysql
+        image: mysql:latest
+        ports:
+            - 8506:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: models
+            MYSQL_USER: developer
+            MYSQL_PASSWORD: developer
+        volumes:
+            - "./docker/dbstorage:/var/lib/mysql"
+            - "./docker/db:/var/db"
+            - "./docker/logs/mysql:/var/log/mysql"
+            - "./docker/mysql/conf/conf.d/mlg.cnf:/etc/mysql/conf.d/mlg.cnf"
+
+    php:
+        container_name: mlg_models_php
+        image: registry.gitlab.mlogroup.ru:8443/mlgperspective/models:dev
+        volumes:
+            - ".:/var/www/models"
+            - "./docker/logs/php:/var/log/php"
+            - "./docker/php/conf/my.ini:/usr/local/etc/php/conf.d/my.ini"
+            - "~/.ssh/:/root/.ssh/"
+        environment:
+            APPLICATION_ENV: dev
+            PHP_XDEBUG_ENABLED: 1
+            XDEBUG_CONFIG: remote_enable=1 remote_mode=req remote_port=9990 remote_host=192.168.88.41 remote_connect_back=0
+            PHP_IDE_CONFIG: serverName=docker
+
+    nginx:
+        container_name: mlg_models_nginx
+        image: nginx:alpine
+        ports:
+            - 8580:80
+        depends_on:
+            - php
+        volumes:
+            - ".:/var/www/models"
+            - "./docker/nginx/conf.d:/etc/nginx/conf.d"
+            - "./docker/logs/nginx:/var/log/nginx"
+
+    memcached:
+        container_name: mlg_models_memcached
+        image: memcached:alpine
+        expose:
+            - 11211
+        links:
+            - php
+
+    phpmyadmin:
+        container_name: mlg_models_phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        depends_on:
+            - db
+        links:
+            - db
+        ports:
+            - 8581:80
+        environment:
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: password

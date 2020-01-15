@@ -1,0 +1,11 @@
+app_controllers:
+    resource: ../../modules/App/src/Controller/Api
+    type: annotation
+    defaults:
+        _format: json
+
+model_controllers:
+    resource: ../../modules/Model/src/Controller/Api
+    type: annotation
+    defaults:
+        _format: json
